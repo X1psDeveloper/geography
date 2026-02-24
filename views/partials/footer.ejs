@@ -1,0 +1,76 @@
+    </main> <!-- Закрытие main из header.ejs -->
+
+    <!-- Футер -->
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-content">
+                <!-- О проекте -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-globe"></i> О проекте</h3>
+                    <p>ГеоАкадемия 7.0 — современный интерактивный учебник географии для 7 класса. Все материалы соответствуют ФГОС.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="ВКонтакте"><i class="fab fa-vk"></i></a>
+                        <a href="#" aria-label="Telegram"><i class="fab fa-telegram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="mailto:koltkova@rambler.ru" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+
+                <!-- Быстрые ссылки -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-link"></i> Быстрые ссылки</h3>
+                    <ul class="footer-links">
+                        <li><a href="/"><i class="fas fa-chevron-right"></i> Главная</a></li>
+                        <li><a href="/topics"><i class="fas fa-chevron-right"></i> Темы уроков</a></li>
+                        <li><a href="/map"><i class="fas fa-chevron-right"></i> Карта мира</a></li>
+                        <li><a href="/quiz"><i class="fas fa-chevron-right"></i> Тесты</a></li>
+                        <li><a href="/blog"><i class="fas fa-chevron-right"></i> Новости</a></li>
+                    </ul>
+                </div>
+
+                <!-- Контакты -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-address-card"></i> Контакты</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-envelope"></i> <a href="mailto:koltkova@rambler.ru">koltkova@rambler.ru</a></li>
+                        <li><i class="fas fa-user-tie"></i> Руководитель: Колткова Л.Г.</li>
+                        <li><i class="fas fa-calendar-alt"></i> Конкурс: до 13.03.2026</li>
+                        <li><i class="fas fa-trophy"></i> Номинация: «Современный учебник географии»</li>
+                    </ul>
+                </div>
+
+                <!-- Полезные ресурсы -->
+                <div class="footer-section">
+                    <h3><i class="fas fa-external-link-alt"></i> Ресурсы</h3>
+                    <ul class="footer-links">
+                        <li><a href="https://geographyofrussia.com" target="_blank"><i class="fas fa-external-link-alt"></i> География России</a></li>
+                        <li><a href="https://www.rgo.ru" target="_blank"><i class="fas fa-external-link-alt"></i> Русское географическое общество</a></li>
+                        <li><a href="https://www.google.com/maps" target="_blank"><i class="fas fa-external-link-alt"></i> Google Карты</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Копирайт -->
+            <div class="footer-bottom">
+                <p>&copy; 2026 ГеоАкадемия 7.0. Все права защищены.</p>
+                <p>Проект создан для конкурса «Интернет-сайт». Версия 2.0.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Основной JavaScript -->
+    <script src="/js/main.js" defer></script>
+
+    <!-- Скрипты для тестов (загружать только на страницах тестов) -->
+    <% if (title && (title.includes('Тест') || title.includes('Викторина'))) { %>
+        <script src="/js/quiz.js" defer></script>
+    <% } %>
+
+    <!-- Скрипты для Google Карт (загружаются в map.ejs отдельно, здесь не нужны) -->
+    <!-- Скрипты для админки (если нужно) -->
+    <% if (title && title.includes('Админ')) { %>
+        <script src="/js/admin.js" defer></script>
+    <% } %>
+
+</body>
+</html>

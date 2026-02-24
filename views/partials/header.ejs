@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> - ГеоАкадемия 7.0</title>
+    <meta name="description" content="Интерактивный учебник географии для 7 класса. Современные материалы, карты и тесты.">
+    <meta name="keywords" content="география, 7 класс, учебник, интерактивный, карты, тесты, ГИА">
+    <meta name="author" content="ГеоАкадемия 7.0">
+    <meta name="robots" content="index, follow">
 
+    <!-- Favicon (создайте файл public/images/logo.png) -->
+    <link rel="icon" type="image/png" href="/images/logo.png">
+
+    <!-- Основные стили -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Font Awesome 6 (иконки) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Preload критических ресурсов (опционально) -->
+    <link rel="preload" href="/css/style.css" as="style">
+</head>
+<body>
+    <!-- Хедер с фиксацией -->
+    <header class="site-header">
+        <div class="container header-content">
+            <!-- Логотип -->
+            <div class="logo">
+                <a href="/" aria-label="ГеоАкадемия 7.0 – главная страница">
+                    <div class="logo-img">
+                        <i class="fas fa-globe-americas"></i>
+                    </div>
+                    <span class="site-title">Гео<span>Академия</span> 7.0</span>
+                </a>
+            </div>
+
+            <!-- Навигация -->
+            <nav class="main-nav" aria-label="Основное меню">
+                <ul>
+                    <li><a href="/" class="<%= title.includes('Главная') ? 'active' : '' %>"><i class="fas fa-home"></i> Главная</a></li>
+                    <li><a href="/topics" class="<%= title.includes('Темы') ? 'active' : '' %>"><i class="fas fa-book-open"></i> Темы</a></li>
+                    <li><a href="/map" class="<%= title.includes('Карта') ? 'active' : '' %>"><i class="fas fa-map-marked-alt"></i> Карта</a></li>
+                    <li><a href="/quiz" class="<%= title.includes('Тест') ? 'active' : '' %>"><i class="fas fa-question-circle"></i> Тесты</a></li>
+                    <li><a href="/blog" class="<%= title.includes('Блог') ? 'active' : '' %>"><i class="fas fa-newspaper"></i> Блог</a></li>
+                    <li><a href="/guestbook" class="<%= title.includes('Гостевая') ? 'active' : '' %>"><i class="fas fa-comments"></i> Гостевая</a></li>
+                    <% if (user && user.isAdmin) { %>
+                        <li><a href="/admin" class="admin-link <%= title.includes('Админ') ? 'active' : '' %>"><i class="fas fa-cog"></i> Админ</a></li>
+                    <% } %>
+                </ul>
+            </nav>
+
+            <!-- Блок авторизации -->
+            <div class="auth-section">
+                <% if (user) { %>
+                    <span class="username">
+                        <i class="fas fa-user-circle"></i> <%= user.username %>
+                    </span>
+                    <a href="/admin/logout" class="btn btn-sm btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </a>
+                <% } else { %>
+                    <a href="/admin/login" class="btn btn-sm btn-login">
+                        <i class="fas fa-sign-in-alt"></i> Войти
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </header>
+
+    <!-- Основной контент (открывается здесь, закрывается в footer) -->
+    <main class="container main-content fade-in">
