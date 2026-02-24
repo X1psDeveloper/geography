@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "title": "Материки и океаны",
+    "description": "Изучите семь материков и пять океанов нашей планеты",
+    "image": "continents.jpg",
+    "content": "Земля состоит из шести материков: Евразия, Африка, Северная Америка, Южная Америка, Австралия и Антарктида. Океаны покрывают около 71% поверхности Земли.",
+    "video": "https://www.youtube.com/embed/OhDJkQ8ldR4?si=oezU8dt85LOwuLdh",
+    "quizId": 1,
+    "icon": "fa-globe-americas"
+  },
+  {
+    "id": 2,
+    "title": "Климатические пояса",
+    "description": "Узнайте о климате и природных зонах Земли",
+    "image": "climate.jpg",
+    "content": "Климатические пояса — это широтные полосы с определённым типом климата. Их выделяют на основе температуры и увлажнения.",
+    "video": "https://www.youtube.com/embed/5gO2r8-l4Lc",
+    "quizId": 2,
+    "icon": "fa-cloud-sun"
+  },
+  {
+    "id": 3,
+    "title": "Население мира",
+    "description": "Изучите расы, народы и страны мира",
+    "image": "population.jpg",
+    "content": "Население Земли превышает 8 миллиардов человек. Люди делятся на расы, говорят на тысячах языков и живут в разных странах.",
+    "video": "https://www.youtube.com/embed/bMd2bVqG2LI?si=kEkO4lPt3lB5zNtS",
+    "quizId": 3,
+    "icon": "fa-users"
+  }
+]
