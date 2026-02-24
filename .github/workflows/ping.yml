@@ -1,7 +1,7 @@
 name: Keep Render Awake
 on:
   schedule:
-    - cron: '*/10 * * * *'  # каждые 10 минут
+    - cron: '*/5 * * * *'  # каждые 10 минут
   workflow_dispatch:         # позволяет запускать вручную из интерфейса
 
 jobs:
