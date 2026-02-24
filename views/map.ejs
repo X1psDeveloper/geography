@@ -1,117 +1,74 @@
 <%- include('partials/header', { title: title }); %>
 
 <h1 class="section-title">Интерактивная карта мира</h1>
-<p class="text-center mb-xl">Исследуйте континенты, океаны и страны с помощью Google Карт</p>
+<p class="text-center mb-xl">Исследуйте континенты, океаны и страны</p>
 
-<!-- Контейнер карты -->
+<!-- Контейнер для карты -->
 <div id="map" style="height: 600px; width: 100%; border-radius: 20px; box-shadow: var(--shadow-lg);"></div>
 
 <!-- Панель управления -->
 <div class="map-controls" style="margin-top: 20px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
     <button id="btn-satellite" class="btn btn-outline btn-sm"><i class="fas fa-satellite"></i> Спутник</button>
     <button id="btn-map" class="btn btn-outline btn-sm"><i class="fas fa-map"></i> Схема</button>
-    <button id="btn-terrain" class="btn btn-outline btn-sm"><i class="fas fa-mountain"></i> Рельеф</button>
     <button id="btn-reset" class="btn btn-outline btn-sm"><i class="fas fa-home"></i> Сброс</button>
 </div>
 
-<!-- Подключение Google Maps API -->
-<script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=ВАШ_API_КЛЮЧ&callback=initMap&language=ru&region=RU">
-</script>
+<!-- Подключаем Leaflet -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-    let map;
-    const markers = [];
-
-    function initMap() {
-        const center = { lat: 50, lng: 100 }; // Центр Евразии
-        
-        map = new google.maps.Map(document.getElementById("map"), {
-            zoom: 2,
-            center: center,
-            mapTypeId: "roadmap",
-            mapTypeControl: false,
-            fullscreenControl: true,
-            streetViewControl: false,
-            zoomControl: true,
-            styles: [
-                {
-                    featureType: "poi",
-                    elementType: "labels",
-                    stylers: [{ visibility: "off" }]
-                }
-            ]
-        });
-
-        // Маркеры континентов
-        const continents = [
-            { name: "Евразия", lat: 50, lng: 100, info: "Самый большой материк, площадь 54 млн км²" },
-            { name: "Африка", lat: 0, lng: 20, info: "Второй по величине, самый жаркий" },
-            { name: "Северная Америка", lat: 45, lng: -100, info: "Третий по величине, Великие озёра" },
-            { name: "Южная Америка", lat: -20, lng: -60, info: "Амазонка, Анды" },
-            { name: "Австралия", lat: -25, lng: 135, info: "Самый маленький, самый сухой" },
-            { name: "Антарктида", lat: -80, lng: 0, info: "Самый холодный, 90% льда Земли" }
-        ];
-
-        continents.forEach(c => {
-            const marker = new google.maps.Marker({
-                position: { lat: c.lat, lng: c.lng },
-                map: map,
-                title: c.name,
-                animation: google.maps.Animation.DROP,
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    scale: 10,
-                    fillColor: "#3b82f6",
-                    fillOpacity: 1,
-                    strokeWeight: 2,
-                    strokeColor: "white"
-                }
-            });
-
-            const infowindow = new google.maps.InfoWindow({
-                content: `<div style="min-width: 200px;"><h3 style="color: #1e293b;">${c.name}</h3><p>${c.info}</p><a href="/topics?continent=${c.name}" style="color: #3b82f6;">Подробнее →</a></div>`
-            });
-
-            marker.addListener("click", () => infowindow.open(map, marker));
-            markers.push(marker);
-        });
-
-        // Маркеры океанов
-        const oceans = [
-            { name: "Тихий океан", lat: 0, lng: -160 },
-            { name: "Атлантический океан", lat: 0, lng: -30 },
-            { name: "Индийский океан", lat: -20, lng: 70 },
-            { name: "Северный Ледовитый океан", lat: 85, lng: 0 },
-            { name: "Южный океан", lat: -60, lng: 0 }
-        ];
-
-        oceans.forEach(o => {
-            new google.maps.Marker({
-                position: { lat: o.lat, lng: o.lng },
-                map: map,
-                title: o.name,
-                icon: {
-                    url: "http://maps.google.com/mapfiles/ms/icons/water.png",
-                    scaledSize: new google.maps.Size(40, 40)
-                }
-            });
-        });
-    }
-
-    // Обработчики кнопок
     document.addEventListener('DOMContentLoaded', function() {
-        const btnSatellite = document.getElementById('btn-satellite');
-        const btnMap = document.getElementById('btn-map');
-        const btnTerrain = document.getElementById('btn-terrain');
-        const btnReset = document.getElementById('btn-reset');
+        // Инициализация карты
+        const map = L.map('map').setView([20, 0], 2);
 
-        if (btnSatellite) btnSatellite.addEventListener('click', () => map.setMapTypeId('satellite'));
-        if (btnMap) btnMap.addEventListener('click', () => map.setMapTypeId('roadmap'));
-        if (btnTerrain) btnTerrain.addEventListener('click', () => map.setMapTypeId('terrain'));
-        if (btnReset) btnReset.addEventListener('click', () => {
-            map.setCenter({ lat: 50, lng: 100 });
-            map.setZoom(2);
+        // Слой карты (OpenStreetMap)
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Спутниковый слой (ESRI World Imagery)
+        const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: '© Esri'
+        });
+
+        // Континенты с координатами
+        const continents = [
+            { name: "Евразия", lat: 50, lng: 100, desc: "Самый большой материк" },
+            { name: "Африка", lat: 0, lng: 20, desc: "Самый жаркий" },
+            { name: "Северная Америка", lat: 45, lng: -100, desc: "Великие озёра" },
+            { name: "Южная Америка", lat: -20, lng: -60, desc: "Амазонка" },
+            { name: "Австралия", lat: -25, lng: 135, desc: "Самый сухой" },
+            { name: "Антарктида", lat: -80, lng: 0, desc: "Самый холодный" }
+        ];
+
+        // Добавляем маркеры
+        continents.forEach(c => {
+            const marker = L.marker([c.lat, c.lng]).addTo(map);
+            marker.bindPopup(`
+                <b>${c.name}</b><br>
+                ${c.desc}<br>
+                <a href="/topics?continent=${c.name}" style="color: #3b82f6;">Узнать больше →</a>
+            `);
+        });
+
+        // Кнопки управления
+        document.getElementById('btn-map').addEventListener('click', () => {
+            map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) map.removeLayer(layer);
+            });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        });
+
+        document.getElementById('btn-satellite').addEventListener('click', () => {
+            map.eachLayer(layer => {
+                if (layer instanceof L.TileLayer) map.removeLayer(layer);
+            });
+            satelliteLayer.addTo(map);
+        });
+
+        document.getElementById('btn-reset').addEventListener('click', () => {
+            map.setView([20, 0], 2);
         });
     });
 </script>
