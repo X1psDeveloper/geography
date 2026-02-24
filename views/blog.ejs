@@ -1,0 +1,78 @@
+<%- include('partials/header', { title: title }); %>
+
+<div class="blog-container">
+    <h1 class="section-title">Блог и новости</h1>
+    <p class="section-subtitle">Актуальные новости географии, экологии и интересные факты.</p>
+    
+    <div class="blog-content">
+        <div class="posts-list">
+            <% if (posts && posts.length > 0) { %>
+                <% posts.forEach(post => { %>
+                <article class="blog-post" id="post-<%= post.id %>">
+                    <div class="post-image">
+                        <img src="/images/blog/<%= post.image || 'default.jpg' %>" alt="<%= post.title %>">
+                    </div>
+                    <div class="post-content">
+                        <div class="post-meta">
+                            <span class="post-date"><i class="fas fa-calendar"></i> <%= post.date %></span>
+                            <span class="post-author"><i class="fas fa-user"></i> <%= post.author %></span>
+                        </div>
+                        <h2 class="post-title"><%= post.title %></h2>
+                        <div class="post-excerpt">
+                            <%= post.excerpt || post.content.substring(0, 200) + '...' %>
+                        </div>
+                        <a href="#post-<%= post.id %>" class="read-more">Читать полностью</a>
+                    </div>
+                </article>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state">
+                    <i class="fas fa-newspaper fa-3x"></i>
+                    <h3>Пока нет новостей</h3>
+                    <p>Следите за обновлениями, скоро здесь появятся интересные статьи!</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <aside class="blog-sidebar">
+            <div class="sidebar-widget">
+                <h3>Категории</h3>
+                <ul class="categories-list">
+                    <li><a href="#">Новости географии <span>(12)</span></a></li>
+                    <li><a href="#">Экологические проблемы <span>(8)</span></a></li>
+                    <li><a href="#">Интересные факты <span>(15)</span></a></li>
+                    <li><a href="#">Советы по изучению <span>(5)</span></a></li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-widget">
+                <h3>Популярные посты</h3>
+                <div class="popular-posts">
+                    <div class="popular-post">
+                        <h4><a href="#">Изменение климата: что мы можем сделать?</a></h4>
+                        <span class="post-date">10.02.2026</span>
+                    </div>
+                    <div class="popular-post">
+                        <h4><a href="#">Топ-10 самых длинных рек мира</a></h4>
+                        <span class="post-date">05.02.2026</span>
+                    </div>
+                    <div class="popular-post">
+                        <h4><a href="#">Как запомнить столицы всех стран?</a></h4>
+                        <span class="post-date">01.02.2026</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-widget newsletter">
+                <h3>Подписка на новости</h3>
+                <p>Получайте новые статьи на почту</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Ваш email" required>
+                    <button type="submit" class="btn btn-primary">Подписаться</button>
+                </form>
+            </div>
+        </aside>
+    </div>
+</div>
+
+<%- include('partials/footer'); %>

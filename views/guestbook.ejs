@@ -1,0 +1,80 @@
+<%- include('partials/header', { title: title }); %>
+
+<div class="guestbook-container">
+    <h1 class="section-title">Гостевая книга</h1>
+    <p class="section-subtitle">Оставьте свой отзыв, задайте вопрос или поделитесь мнением о сайте.</p>
+    
+    <div class="guestbook-content">
+        <div class="messages-list">
+            <h2>Сообщения (<%= messages ? messages.length : 0 %>)</h2>
+            
+            <% if (messages && messages.length > 0) { %>
+                <% messages.forEach(message => { %>
+                <div class="message-card">
+                    <div class="message-header">
+                        <div class="message-author">
+                            <i class="fas fa-user"></i>
+                            <strong><%= message.name %></strong>
+                        </div>
+                        <div class="message-date">
+                            <i class="fas fa-calendar"></i>
+                            <%= message.date %> <%= message.time ? ' в ' + message.time : '' %>
+                        </div>
+                    </div>
+                    <div class="message-text">
+                        <%= message.message %>
+                    </div>
+                </div>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state">
+                    <i class="fas fa-comments fa-3x"></i>
+                    <h3>Пока нет сообщений</h3>
+                    <p>Будьте первым, кто оставит отзыв!</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="add-message">
+            <h2>Оставить сообщение</h2>
+            <form action="/guestbook/add" method="POST">
+                <div class="form-group">
+                    <label for="name">Ваше имя:</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Как к вам обращаться?" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Сообщение:</label>
+                    <textarea id="message" name="message" class="form-control" 
+                              placeholder="Напишите ваш отзыв, вопрос или предложение..." 
+                              rows="5" required></textarea>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-paper-plane"></i> Отправить
+                    </button>
+                    <button type="reset" class="btn btn-outline">
+                        <i class="fas fa-eraser"></i> Очистить
+                    </button>
+                </div>
+                
+                <div class="form-notice">
+                    <p><i class="fas fa-info-circle"></i> Все сообщения проходят модерацию перед публикацией.</p>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="guestbook-rules">
+        <h3>Правила гостевой книги</h3>
+        <ul>
+            <li>Будьте вежливы и уважайте других пользователей</li>
+            <li>Сообщения должны быть связаны с тематикой сайта</li>
+            <li>Запрещены оскорбления, спам и реклама</li>
+            <li>Администрация оставляет за собой право удалять сообщения</li>
+        </ul>
+    </div>
+</div>
+
+<%- include('partials/footer'); %>

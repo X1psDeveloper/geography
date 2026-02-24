@@ -1,0 +1,245 @@
+<%- include('partials/header', { title: title, user: user }) %>
+
+<div class="admin-panel">
+    <h1 class="section-title">Панель управления</h1>
+    <p class="text-center mb-xl">Добро пожаловать, <%= user ? user.username : 'Администратор' %>! Управляйте контентом сайта.</p>
+
+    <!-- Блок статистики -->
+    <div class="stats-grid">
+        <div class="stat-item">
+            <div class="stat-number"><%= topics ? topics.length : 0 %></div>
+            <div class="stat-label"><i class="fas fa-book"></i> Тем</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number"><%= posts ? posts.length : 0 %></div>
+            <div class="stat-label"><i class="fas fa-newspaper"></i> Новостей</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number"><%= messages ? messages.length : 0 %></div>
+            <div class="stat-label"><i class="fas fa-comments"></i> Сообщений</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number"><%= new Date().toLocaleDateString('ru-RU', {day:'numeric', month:'numeric', year:'numeric'}) %></div>
+            <div class="stat-label"><i class="fas fa-calendar"></i> Дата</div>
+        </div>
+    </div>
+
+    <div class="admin-grid">
+        <!-- === ЛЕВАЯ КОЛОНКА: Управление темами === -->
+        <div class="admin-card">
+            <h3><i class="fas fa-book-open"></i> Управление темами</h3>
+            
+            <!-- Форма добавления новой темы -->
+            <form action="/admin/add-topic" method="POST" enctype="multipart/form-data" class="admin-form">
+                <div class="form-group">
+                    <label for="topic-title" class="form-label">Название темы</label>
+                    <input type="text" id="topic-title" name="title" class="form-control" placeholder="Например: Материки и океаны" required>
+                </div>
+                <div class="form-group">
+                    <label for="topic-description" class="form-label">Краткое описание</label>
+                    <input type="text" id="topic-description" name="description" class="form-control" placeholder="Кратко о чём тема" required>
+                </div>
+                <div class="form-group">
+                    <label for="topic-content" class="form-label">Полный текст урока</label>
+                    <textarea id="topic-content" name="content" class="form-control" rows="5" placeholder="Введите содержание урока..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="topic-video" class="form-label">Ссылка на видео (YouTube embed)</label>
+                    <input type="url" id="topic-video" name="video" class="form-control" placeholder="https://www.youtube.com/embed/...">
+                    <small class="form-text">Оставьте пустым, если видео нет</small>
+                </div>
+                <div class="form-group">
+                    <label for="topic-image" class="form-label">Изображение для темы</label>
+                    <input type="file" id="topic-image" name="image" class="form-control" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-plus-circle"></i> Добавить тему
+                </button>
+            </form>
+
+            <hr style="margin: 30px 0; border-color: var(--border-color);">
+
+            <!-- Список существующих тем с кнопками удаления -->
+            <h4><i class="fas fa-list"></i> Существующие темы</h4>
+            <% if (topics && topics.length > 0) { %>
+                <ul class="admin-list">
+                    <% topics.forEach(topic => { %>
+                        <li>
+                            <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                                <a href="/topic/<%= topic.id %>" target="_blank" style="flex: 1;"><%= topic.title %></a>
+                                <span class="admin-badge">ID: <%= topic.id %></span>
+                                <form action="/admin/delete-topic/<%= topic.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Удалить тему «<%= topic.title %>»? Это действие необратимо.');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Удалить
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } else { %>
+                <p class="text-muted">Тем пока нет.</p>
+            <% } %>
+        </div>
+
+        <!-- === ПРАВАЯ КОЛОНКА: Управление блогом === -->
+        <div class="admin-card">
+            <h3><i class="fas fa-newspaper"></i> Управление блогом</h3>
+
+            <!-- Форма добавления новости -->
+            <form action="/admin/add-post" method="POST" enctype="multipart/form-data" class="admin-form">
+                <div class="form-group">
+                    <label for="post-title" class="form-label">Заголовок новости</label>
+                    <input type="text" id="post-title" name="title" class="form-control" placeholder="Например: Открытие нового раздела" required>
+                </div>
+                <div class="form-group">
+                    <label for="post-content" class="form-label">Текст новости</label>
+                    <textarea id="post-content" name="content" class="form-control" rows="5" placeholder="Введите полный текст новости..." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="post-image" class="form-label">Изображение</label>
+                    <input type="file" id="post-image" name="image" class="form-control" accept="image/*">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-plus-circle"></i> Опубликовать новость
+                </button>
+            </form>
+
+            <hr style="margin: 30px 0; border-color: var(--border-color);">
+
+            <!-- Список последних новостей с кнопками удаления -->
+            <h4><i class="fas fa-history"></i> Последние новости</h4>
+            <% if (posts && posts.length > 0) { %>
+                <ul class="admin-list">
+                    <% posts.slice(0, 10).forEach(post => { %>
+                        <li>
+                            <div style="display: flex; align-items: center; gap: 15px; width: 100%;">
+                                <a href="/blog#post-<%= post.id %>" target="_blank" style="flex: 1;"><%= post.title %></a>
+                                <span class="admin-badge"><%= post.date %></span>
+                                <form action="/admin/delete-post/<%= post.id %>" method="POST" style="display: inline;" onsubmit="return confirm('Удалить новость «<%= post.title %>»?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash-alt"></i> Удалить
+                                    </button>
+                                </form>
+                            </div>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } else { %>
+                <p class="text-muted">Новостей пока нет.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- === БЛОК УПРАВЛЕНИЯ ГОСТЕВОЙ КНИГОЙ === -->
+    <div class="admin-card" style="margin-top: 30px;">
+        <h3><i class="fas fa-comments"></i> Управление гостевой книгой</h3>
+        <p>Всего сообщений: <strong><%= messages ? messages.length : 0 %></strong></p>
+        
+        <div style="max-height: 400px; overflow-y: auto; margin-top: 20px;">
+            <% if (messages && messages.length > 0) { %>
+                <% messages.slice(0, 20).forEach(msg => { %>
+                    <div class="message-item" style="display: flex; justify-content: space-between; align-items: start; gap: 15px;">
+                        <div style="flex: 1;">
+                            <strong><%= msg.name %></strong> 
+                            <span style="color: var(--color-text-muted); font-size: 0.9rem;">
+                                <%= msg.date %> <%= msg.time %>
+                            </span>
+                            <p style="margin-top: 8px;"><%= msg.message %></p>
+                        </div>
+                        <form action="/admin/delete-message/<%= msg.id %>" method="POST" onsubmit="return confirm('Удалить сообщение от <%= msg.name %>?');">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                <% }); %>
+            <% } else { %>
+                <p class="text-muted">Гостевая книга пуста.</p>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- Блок с инструкцией -->
+    <div class="admin-card" style="margin-top: 30px; background: var(--color-primary-light);">
+        <h3><i class="fas fa-info-circle"></i> Инструкция</h3>
+        <ul style="margin-left: 20px;">
+            <li><strong>Добавление темы:</strong> заполните все поля формы слева. После добавления тема появится на странице <a href="/topics" target="_blank">/topics</a>.</li>
+            <li><strong>Добавление новости:</strong> заполните форму справа. Новость появится в блоге.</li>
+            <li><strong>Удаление:</strong> используйте красные кнопки рядом с каждым элементом. Действие необратимо.</li>
+            <li><strong>Пароль администратора:</strong> <code>geography2026</code> (можно изменить в .env).</li>
+        </ul>
+    </div>
+</div>
+
+<style>
+    /* Стили для админ-панели (добавить в конец style.css или оставить здесь) */
+    .admin-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        margin-top: 30px;
+    }
+    .admin-card {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--border-color);
+    }
+    .admin-card h3 {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid var(--color-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .admin-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    .admin-list li {
+        padding: 12px 0;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .admin-badge {
+        background: var(--color-primary-light);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        color: var(--color-primary-dark);
+        white-space: nowrap;
+    }
+    .message-item {
+        padding: 15px;
+        border-bottom: 1px solid var(--border-color);
+        background: var(--color-off-white);
+        border-radius: 12px;
+        margin-bottom: 10px;
+    }
+    .btn-sm {
+        padding: 6px 16px;
+        font-size: 0.85rem;
+    }
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+        border: none;
+    }
+    .btn-danger:hover {
+        background: #dc2626;
+    }
+    .w-100 {
+        width: 100%;
+    }
+    @media (max-width: 768px) {
+        .admin-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<%- include('partials/footer'); %>

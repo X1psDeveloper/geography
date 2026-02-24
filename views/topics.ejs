@@ -1,0 +1,211 @@
+<%- include('partials/header', { title: title }); %>
+
+<div class="topics-header">
+    <h1 class="section-title">Темы для изучения</h1>
+    <p class="section-subtitle">Выберите тему для изучения. Все материалы соответствуют программе 7 класса.</p>
+    
+    <div class="search-filter">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="topic-search" placeholder="Поиск тем...">
+        </div>
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all"><i class="fas fa-globe"></i> Все</button>
+            <button class="filter-btn" data-filter="easy"><i class="fas fa-leaf"></i> Лёгкие</button>
+            <button class="filter-btn" data-filter="medium"><i class="fas fa-chart-line"></i> Средние</button>
+            <button class="filter-btn" data-filter="hard"><i class="fas fa-mountain"></i> Сложные</button>
+        </div>
+    </div>
+</div>
+
+<div class="topics-container">
+    <% if (topics && topics.length > 0) { %>
+        <div class="topics-grid">
+            <% topics.forEach(topic => { %>
+            <div class="topic-card" data-category="<%= topic.category || 'physical' %>">
+                <div class="topic-image">
+                    <img src="/images/continents/<%= topic.image || 'default.jpg' %>" alt="<%= topic.title %>">
+                    <div class="topic-badge">
+                        <i class="fas fa-book"></i> Урок
+                    </div>
+                </div>
+                <div class="topic-content">
+                    <h3 class="topic-title"><%= topic.title %></h3>
+                    <p class="topic-description"><%= topic.description %></p>
+                    
+                    <div class="topic-meta">
+                        <span class="meta-item">
+                            <i class="fas fa-clock"></i> 45 мин
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-question-circle"></i> 10 вопросов
+                        </span>
+                        <span class="meta-item">
+                            <i class="fas fa-chart-line"></i> Средняя сложность
+                        </span>
+                    </div>
+                    
+                    <div class="topic-actions">
+                        <a href="/topic/<%= topic.id %>" class="btn btn-primary">
+                            <i class="fas fa-play"></i> Начать урок
+                        </a>
+                        <a href="/quiz/<%= topic.quizId %>" class="btn btn-outline">
+                            <i class="fas fa-brain"></i> Тест
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    <% } else { %>
+        <div class="empty-state">
+            <i class="fas fa-book-open fa-3x"></i>
+            <h3>Темы в разработке</h3>
+            <p>Мы активно работаем над созданием новых уроков. Скоро здесь появится много интересных материалов!</p>
+            <a href="/" class="btn btn-primary">
+                <i class="fas fa-home"></i> Вернуться на главную
+            </a>
+        </div>
+    <% } %>
+</div>
+
+<!-- Additional Resources -->
+<div class="resources-section">
+    <div class="container">
+        <h2 class="section-title">Дополнительные ресурсы</h2>
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <i class="fas fa-video"></i>
+                </div>
+                <h3>Видеоуроки</h3>
+                <p>Смотрите увлекательные видеоуроки по всем темам географии.</p>
+                <a href="#" class="read-more">Смотреть <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <h3>Материалы для скачивания</h3>
+                <p>Карты, схемы и конспекты в удобном формате для скачивания.</p>
+                <a href="#" class="read-more">Скачать <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <i class="fas fa-tasks"></i>
+                </div>
+                <h3>Практические задания</h3>
+                <p>Интерактивные задания для закрепления материала.</p>
+                <a href="#" class="read-more">Выполнить <i class="fas fa-arrow-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Study Tips -->
+<div class="study-tips">
+    <div class="container">
+        <h2 class="section-title">Советы по изучению</h2>
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tip-number">1</div>
+                <h3>Регулярность</h3>
+                <p>Занимайтесь регулярно, лучше по 30 минут каждый день, чем 3 часа раз в неделю.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-number">2</div>
+                <h3>Практика</h3>
+                <p>После изучения темы обязательно проходите тесты для закрепления знаний.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-number">3</div>
+                <h3>Карты</h3>
+                <p>Работайте с интерактивными картами - это развивает пространственное мышление.</p>
+            </div>
+            
+            <div class="tip-card">
+                <div class="tip-number">4</div>
+                <h3>Конспекты</h3>
+                <p>Делайте краткие конспекты по каждой теме для быстрого повторения.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Поиск тем
+    const searchInput = document.getElementById('topic-search');
+    const topicCards = document.querySelectorAll('.topic-card');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            topicCards.forEach(card => {
+                const title = card.querySelector('.topic-title').textContent.toLowerCase();
+                const description = card.querySelector('.topic-description').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    }
+    
+    // Фильтрация по категориям
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    
+    filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const filter = this.dataset.filter;
+            
+            // Убираем активный класс со всех кнопок
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Добавляем активный класс текущей кнопке
+            this.classList.add('active');
+            
+            topicCards.forEach(card => {
+                const category = card.dataset.category;
+                
+                if (filter === 'all' || category === filter) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+    
+    // Анимация карточек при загрузке
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.1 });
+    
+    topicCards.forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+        
+        setTimeout(() => {
+            if (card.classList.contains('visible')) {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }
+        }, 100);
+    });
+});
+</script>
+
+<%- include('partials/footer'); %>

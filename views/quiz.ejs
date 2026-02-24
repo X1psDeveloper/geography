@@ -1,0 +1,75 @@
+<%- include('partials/header', { title: title }) %>
+
+<h1 class="section-title">Тесты и викторины</h1>
+<p class="text-center mb-xl">Проверьте свои знания по географии. Выберите тему и отвечайте на вопросы.</p>
+
+<!-- Фильтры больше не отображаются — только заголовок "Все тесты" -->
+<!-- <div class="filter-group"> ... </div> удалён полностью -->
+
+<!-- Поиск (оставляем, он полезен) -->
+<div class="search-box" style="max-width: 500px; margin: 0 auto 40px auto;">
+    <i class="fas fa-search"></i>
+    <input type="text" id="quiz-search" class="form-control" placeholder="🔍 Поиск тестов..." style="padding-left: 45px;">
+</div>
+
+<!-- Сетка тестов -->
+<div class="grid grid-3" id="quiz-grid">
+    <% if (quizzes && quizzes.length > 0) { %>
+        <% quizzes.forEach(quiz => { %>
+            <div class="quiz-card card" data-quiz-id="<%= quiz.id %>" style="cursor: pointer;">
+                <div class="quiz-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <h3 class="quiz-title"><%= quiz.title %></h3>
+                <p class="quiz-description"><%= quiz.description || 'Проверьте свои знания' %></p>
+                <div class="quiz-meta">
+                    <span><i class="fas fa-list-ol"></i> <%= quiz.questions ? quiz.questions.length : 0 %> вопросов</span>
+                </div>
+                <a href="/quiz/<%= quiz.id %>" class="btn btn-primary" style="margin-top: 20px;">
+                    <i class="fas fa-play"></i> Начать тест
+                </a>
+            </div>
+        <% }); %>
+    <% } else { %>
+        <div class="empty-state" style="grid-column: 1/-1; text-align: center; padding: 60px;">
+            <i class="fas fa-clipboard-list fa-3x" style="color: var(--color-primary);"></i>
+            <h3>Тестов пока нет</h3>
+            <p>Скоро здесь появятся новые викторины.</p>
+        </div>
+    <% } %>
+</div>
+
+<script>
+    // Поиск тестов по названию и описанию
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('quiz-search');
+        const quizCards = document.querySelectorAll('.quiz-card');
+
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const query = this.value.toLowerCase();
+                quizCards.forEach(card => {
+                    const title = card.querySelector('.quiz-title')?.textContent.toLowerCase() || '';
+                    const desc = card.querySelector('.quiz-description')?.textContent.toLowerCase() || '';
+                    if (title.includes(query) || desc.includes(query)) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        }
+
+        // Клик по карточке ведёт на тест
+        quizCards.forEach(card => {
+            card.addEventListener('click', function(e) {
+                // Игнорируем клик по кнопке (чтобы не срабатывало два раза)
+                if (e.target.tagName === 'A' || e.target.closest('a')) return;
+                const quizId = this.dataset.quizId;
+                if (quizId) window.location.href = `/quiz/${quizId}`;
+            });
+        });
+    });
+</script>
+
+<%- include('partials/footer'); %>

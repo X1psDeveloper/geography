@@ -1,0 +1,89 @@
+<%- include('partials/header', { title: title }); %>
+
+<div class="quiz-result">
+    <div class="result-header">
+        <h1 class="section-title">Результаты теста</h1>
+        <h2 class="quiz-title"><%= quizTitle %></h2>
+    </div>
+    
+    <div class="result-summary">
+        <div class="result-card">
+            <div class="result-score">
+                <div class="score-number"><%= score %>/<%= total %></div>
+                <div class="score-percentage"><%= percentage %>%</div>
+            </div>
+            
+            <div class="result-message">
+                <% if (percentage >= 90) { %>
+                    <p class="success">Отлично! Вы прекрасно знаете материал! 🏆</p>
+                <% } else if (percentage >= 70) { %>
+                    <p class="good">Хорошо! Вы хорошо разбираетесь в теме! 👍</p>
+                <% } else if (percentage >= 50) { %>
+                    <p class="average">Удовлетворительно. Есть над чем поработать. 📚</p>
+                <% } else { %>
+                    <p class="poor">Попробуйте ещё раз. Рекомендуем повторить материал. 🔄</p>
+                <% } %>
+            </div>
+            
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: <%= percentage %>%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="result-details">
+        <h3>Подробные результаты</h3>
+        
+        <div class="questions-review">
+            <% results.forEach((result, index) => { %>
+            <div class="question-review <%= result.isCorrect ? 'correct' : 'incorrect' %>">
+                <div class="question-header">
+                    <h4>Вопрос <%= index + 1 %>: <%= result.question %></h4>
+                    <span class="status-badge <%= result.isCorrect ? 'correct' : 'incorrect' %>">
+                        <%= result.isCorrect ? 'Правильно' : 'Неправильно' %>
+                    </span>
+                </div>
+                
+                <div class="answer-comparison">
+                    <div class="answer-item">
+                        <strong>Ваш ответ:</strong> <%= result.userAnswer %>
+                    </div>
+                    <% if (!result.isCorrect) { %>
+                    <div class="answer-item">
+                        <strong>Правильный ответ:</strong> <%= result.correctAnswer %>
+                    </div>
+                    <% } %>
+                </div>
+                
+                <div class="explanation">
+                    <strong>Объяснение:</strong> <%= result.explanation %>
+                </div>
+            </div>
+            <% }); %>
+        </div>
+    </div>
+    
+    <div class="result-actions">
+        <a href="/quiz" class="btn btn-outline">
+            <i class="fas fa-list"></i> К списку тестов
+        </a>
+        <a href="/topics" class="btn btn-outline">
+            <i class="fas fa-book"></i> К темам
+        </a>
+        <a href="/quiz/<%= quizId %>" class="btn btn-primary">
+            <i class="fas fa-redo"></i> Пройти тест снова
+        </a>
+    </div>
+    
+    <div class="result-tips">
+        <h3>Советы для улучшения результатов</h3>
+        <ul>
+            <li>Внимательно читайте вопросы</li>
+            <li>Исключайте заведомо неправильные ответы</li>
+            <li>Следите за временем</li>
+            <li>Повторяйте материал после теста</li>
+        </ul>
+    </div>
+</div>
+
+<%- include('partials/footer'); %>

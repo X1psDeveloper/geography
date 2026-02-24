@@ -1,0 +1,193 @@
+<%- include('partials/header', { title: title }); %>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="container">
+        <h1>География - это увлекательно!</h1>
+        <p class="hero-subtitle">
+            Добро пожаловать в интерактивный учебник географии для 7 класса. 
+            Изучайте мир с помощью современных технологий, интерактивных карт и увлекательных тестов.
+        </p>
+        <div class="hero-buttons">
+            <a href="/topics" class="btn btn-primary">
+                <i class="fas fa-play-circle"></i> Начать обучение
+            </a>
+            <a href="/quiz" class="btn btn-secondary">
+                <i class="fas fa-brain"></i> Пройти тест
+            </a>
+            <a href="#features" class="btn btn-outline">
+                <i class="fas fa-info-circle"></i> Узнать больше
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="features">
+    <div class="container">
+        <h2 class="section-title">Почему наш учебник современный?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-globe-americas"></i>
+                </div>
+                <h3 class="card-title">Интерактивные карты</h3>
+                <p>Изучайте материки, страны и природные зоны на интерактивных картах с маркерами и пояснениями. Масштабируйте, добавляйте слои и получайте информацию в один клик.</p>
+                <a href="/map" class="read-more">
+                    Открыть карту <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <h3 class="card-title">Тесты и викторины</h3>
+                <p>Закрепляйте знания с помощью интерактивных тестов с автоматической проверкой. Получайте мгновенную обратную связь и отслеживайте свой прогресс.</p>
+                <a href="/quiz" class="read-more">
+                    Пройти тест <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <h3 class="card-title">Актуальные материалы</h3>
+                <p>Следите за новостями географии, экологическими проблемами и открытиями. Наш контент регулярно обновляется в соответствии с последними научными данными.</p>
+                <a href="/blog" class="read-more">
+                    Читать блог <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-comments"></i>
+                </div>
+                <h3 class="card-title">Общение и обратная связь</h3>
+                <p>Задавайте вопросы, делитесь мнениями в гостевой книге и обсуждайте темы с одноклассниками. Ваше мнение важно для нас!</p>
+                <a href="/guestbook" class="read-more">
+                    В гостевую <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest News -->
+<% if (posts && posts.length > 0) { %>
+<section class="latest-news">
+    <div class="container">
+        <h2 class="section-title">Последние новости</h2>
+        <div class="news-grid">
+            <% posts.forEach(post => { %>
+            <article class="news-card">
+                <div class="card-date">
+                    <i class="far fa-calendar"></i> <%= post.date %>
+                </div>
+                <h3 class="card-title"><%= post.title %></h3>
+                <p><%= post.excerpt || post.content.substring(0, 150) + '...' %></p>
+                <a href="/blog#post-<%= post.id %>" class="read-more">
+                    Читать дальше <i class="fas fa-arrow-right"></i>
+                </a>
+            </article>
+            <% }); %>
+        </div>
+        <div class="center">
+            <a href="/blog" class="btn btn-outline">
+                <i class="fas fa-newspaper"></i> Все новости
+            </a>
+        </div>
+    </div>
+</section>
+<% } %>
+
+<!-- Statistics -->
+<section class="stats">
+    <div class="container">
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">15+</div>
+                <div class="stat-label">Тем для изучения</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Интерактивных тестов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">100+</div>
+                <div class="stat-label">Карт и иллюстраций</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Доступ к материалам</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Topics Preview -->
+<section class="topics-preview">
+    <div class="container">
+        <h2 class="section-title">Популярные темы</h2>
+        <div class="topics-grid">
+            <div class="topic-card">
+                <div class="topic-icon">
+                    <i class="fas fa-mountain"></i>
+                </div>
+                <h3 class="card-title">Материки и океаны</h3>
+                <p>Изучите семь материков и пять океанов нашей планеты. Узнайте об их особенностях, климате и географическом положении.</p>
+                <a href="/topic/1" class="read-more">
+                    Изучить тему <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-icon">
+                    <i class="fas fa-cloud-sun"></i>
+                </div>
+                <h3 class="card-title">Климатические пояса</h3>
+                <p>Узнайте о климате и природных зонах Земли. Изучите особенности каждого климатического пояса и его влияние на природу.</p>
+                <a href="/topics" class="read-more">
+                    Изучить тему <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            
+            <div class="topic-card">
+                <div class="topic-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3 class="card-title">Население мира</h3>
+                <p>Изучите расы, народы и страны мира. Узнайте о демографических процессах и распределении населения по планете.</p>
+                <a href="/topics" class="read-more">
+                    Изучить тему <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+        <div class="center">
+            <a href="/topics" class="btn btn-primary">
+                <i class="fas fa-book-open"></i> Все темы
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="cta">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Готовы начать обучение?</h2>
+            <p>Присоединяйтесь к тысячам учеников, которые уже изучают географию с помощью нашего интерактивного учебника.</p>
+            <div class="cta-buttons">
+                <a href="/topics" class="btn btn-primary btn-lg">
+                    <i class="fas fa-graduation-cap"></i> Начать сейчас
+                </a>
+                <a href="/guestbook" class="btn btn-outline btn-lg">
+                    <i class="fas fa-question-circle"></i> Задать вопрос
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer'); %>

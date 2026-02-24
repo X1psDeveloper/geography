@@ -1,0 +1,108 @@
+<%- include('partials/header', { title: title }); %>
+
+<div class="quiz-detail">
+    <div class="breadcrumb">
+        <a href="/">Главная</a> / <a href="/quiz">Тесты</a> / <span><%= quiz.title %></span>
+    </div>
+    
+    <div class="quiz-header">
+        <h1 class="quiz-title"><%= quiz.title %></h1>
+        <p class="quiz-description"><%= quiz.description %></p>
+        
+        <div class="quiz-meta">
+            <div class="meta-item">
+                <i class="fas fa-question-circle"></i>
+                <span><%= quiz.questions ? quiz.questions.length : 0 %> вопросов</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-clock"></i>
+                <span id="time-limit">15:00</span>
+            </div>
+            <div class="meta-item">
+                <i class="fas fa-chart-line"></i>
+                <span>Средний результат: 75%</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="quiz-timer">
+        <div class="timer-label">Оставшееся время:</div>
+        <div class="timer-display" id="quiz-timer">15:00</div>
+    </div>
+    
+    <form id="quiz-form" action="/quiz/<%= quiz.id %>/submit" method="POST">
+        <div class="questions-list">
+            <% if (quiz.questions && quiz.questions.length > 0) { %>
+                <% quiz.questions.forEach((question, index) => { %>
+                <div class="question-card" id="question-<%= question.id %>">
+                    <div class="question-header">
+                        <h3 class="question-number">Вопрос <%= index + 1 %></h3>
+                        <button type="button" class="skip-question" data-question-id="<%= question.id %>">
+                            Пропустить
+                        </button>
+                    </div>
+                    
+                    <p class="question-text"><%= question.question %></p>
+                    
+                    <div class="answer-options">
+                        <% question.options.forEach((option, optIndex) => { %>
+                        <div class="answer-option" data-question-id="<%= question.id %>" data-option-index="<%= optIndex %>">
+                            <input type="radio" 
+                                   name="answers[<%= question.id %>]" 
+                                   id="q<%= question.id %>_o<%= optIndex %>"
+                                   value="<%= optIndex %>"
+                                   style="display: none;">
+                            <label for="q<%= question.id %>_o<%= optIndex %>">
+                                <span class="option-letter"><%= String.fromCharCode(65 + optIndex) %></span>
+                                <%= option %>
+                            </label>
+                        </div>
+                        <% }); %>
+                    </div>
+                </div>
+                <% }); %>
+            <% } else { %>
+                <div class="empty-state">
+                    <p>Вопросы для этого теста пока не добавлены.</p>
+                </div>
+            <% } %>
+        </div>
+        
+        <div class="quiz-submit">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i class="fas fa-paper-plane"></i> Завершить тест
+            </button>
+            <div class="progress-info">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="quiz-progress"></div>
+                </div>
+                <span id="progress-text">0/<%= quiz.questions ? quiz.questions.length : 0 %> вопросов</span>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script src="/js/quiz.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация прогресса
+    const updateProgress = () => {
+        const totalQuestions = <%= quiz.questions ? quiz.questions.length : 0 %>;
+        const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+        const progress = totalQuestions > 0 ? (answered / totalQuestions) * 100 : 0;
+        
+        document.getElementById('quiz-progress').style.width = progress + '%';
+        document.getElementById('progress-text').textContent = 
+            `${answered}/${totalQuestions} вопросов`;
+    };
+    
+    // Следим за изменением ответов
+    document.querySelectorAll('input[type="radio"]').forEach(radio => {
+        radio.addEventListener('change', updateProgress);
+    });
+    
+    updateProgress();
+});
+</script>
+
+<%- include('partials/footer'); %>
