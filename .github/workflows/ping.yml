@@ -1,1 +1,13 @@
+name: Keep Render Awake
+on:
+  schedule:
+    - cron: '*/10 * * * *'  # каждые 10 минут
+  workflow_dispatch:         # позволяет запускать вручную из интерфейса
 
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the site
+        run: |
+          curl -I -L --fail --retry 3 https://geography-ddh1.onrender.com/
